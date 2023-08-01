@@ -1,14 +1,18 @@
 import pandas as pd                 # 2.0.2
-import numpy as np                  # 1.24.1         
+import numpy as np                  # 1.24.3         
 
 from bs4 import BeautifulSoup       # 0.0.1
 import requests                     # 2.28.1
 import tabulate                     # 0.9.0
 from langdetect import detect       # 1.0.9
+import text2emotion as te           # 0.0.5 please downgrade following library emoji==1.7.0 
 
 import os
 import re
 import string
+from datetime import datetime
+
+from sentiment_stuff import measure_afinn, measure_bertweet, measure_bing, measure_sid
 # from functools import map
 
 # SETTINGS AND GLOBAL STUFF
@@ -34,49 +38,6 @@ class nitter_scraper:
         self._headers = headers
         self._domain = domain
 
-    def search(self, q: str='', max_pgs: int=10, tweet_css='tweet-content', showmore_css='show-more', clean: bool=True, lang='en', show_rt: bool=False):
-        url = nitter_scraper.form_query(q)
-
-
-        tweets = []
-        for pg in range(max_pgs):
-            resp = requests.get(url, headers=self._headers)
-            soup = BeautifulSoup(resp.text, 'html.parser')
-
-            print(f'pgs {pg+1}/{max_pgs}')
-            print(f'searching {url}\n')
-            results = list(soup.find_all(class_=tweet_css))
-            if results: 
-                for tweet in results:
-                    # clean tweet
-                    tweet = nitter_scraper.reformat_text(tweet.text) if clean else tweet.text
-
-                    # skip if not in desired language 
-                    if detect(tweet) != lang: continue
-
-                    # skip if not showing retweets
-                    if not show_rt and tweet.lower().startswith('rt'): continue
-
-                    tweets.append(tweet)
-
-
-            # navigate to next page if it exists 
-            # the -1 because the selector will also pick up the previous page link
-            show_more = soup.find_all(class_=showmore_css)[-1]
-            if not show_more:
-                break
-
-            url = show_more.findChild('a')['href']
-            url = f'{self._domain}/{url}'
-
-        print(f'results: {len(tweets)}\n')
-        return pd.DataFrame(np.array(tweets))
-
-
-        # for i, tweet in enumerate(search_results):
-        #     print(f'tweet_{i}: {nitter_scraper.reformat_text(tweet.text)}\n')
-
-    
     '''
         generates formatted query to search nitter.net
         how to format search queries *q:
@@ -99,6 +60,119 @@ class nitter_scraper:
         OR                                          for matching term_i or term_j *default AND when no separator
         "term1 term2..."                            for terms with spaces
     '''
+    def search(
+        self, 
+        q: str='', 
+        max_pgs: int=50, 
+        clean: bool=True, 
+        lang='en', 
+        filter_lang: bool=True, 
+        show_rt: bool=False,
+        sentiments: bool=False,
+        add_q_col: bool=False,
+        tweet_css='tweet-content', 
+        showmore_css='show-more', 
+        username_css='username', 
+        date_css='tweet-date'):
+
+        url = nitter_scraper.form_query(q)
+
+        tweets = []
+        for pg in range(max_pgs):
+            resp = requests.get(url, headers=self._headers)
+            soup = BeautifulSoup(resp.text, 'html.parser')
+
+            print(f'pgs {pg+1}/{max_pgs}')
+            print(f'searching {url}\n')
+            results = list(soup.find_all(class_=tweet_css))
+            usernames = list(soup.find_all(class_=username_css))
+            dates = list(soup.find_all(class_=date_css))
+            zipped = zip(usernames, results, dates)
+
+            if zipped: 
+                for user, tweet, date in zipped:
+                    # clean tweet
+                    tweet = nitter_scraper.reformat_text(tweet.text) if clean else tweet.text
+                    user = user.text[1:]
+                    date = nitter_scraper.reformat_text(date.findChild('a')['title'])
+
+                    # skip empty tweets
+                    if not tweet: continue
+
+                    # skip if not in desired language 
+                    try:
+                        if filter_lang and detect(tweet) != lang: continue
+                    except:
+                        continue
+
+                    # skip if not showing retweets
+                    if not show_rt and tweet.lower().startswith('rt'): continue
+
+                    # finds all the sentiments
+                    if sentiments:
+                        happy, angry, surprise, sad, fear = list(te.get_emotion(tweet).values())
+                        afinn = measure_afinn(tweet)
+                        bing = measure_bing(tweet)
+                        sid = measure_sid(tweet)
+                        bertweet, confidence = measure_bertweet(tweet)
+
+                        tweets.append({
+                            'username': user,
+                            'tweet_text': tweet,
+                            'date': date,
+                            'happy': happy,
+                            'angry': angry,
+                            'surprise': surprise,
+                            'sad': sad,
+                            'fear': fear,
+                            'afinn': afinn,
+                            'bing': bing,
+                            'sid': sid,
+                            'bertweet': bertweet,
+                            'bertweet_confidence': confidence,
+                        })
+
+                    else:
+                        tweets.append({
+                            'username': user,
+                            'tweet_text': tweet,
+                            'date': date,
+                        })
+
+
+
+            # navigate to next page if it exists 
+            # the -1 because the selector will also pick up the previous page link
+            show_more = soup.find_all(class_=showmore_css)
+            if show_more: show_more = show_more[-1]
+            if not show_more:
+                break
+
+            url = show_more.findChild('a')['href']
+            url = f'{self._domain}/{url}'
+
+        if add_q_col: tweets['q'] = q
+        tweets = pd.DataFrame(tweets).drop_duplicates(subset=['username', 'tweet_text'])
+        print(f'results: {len(tweets)}\n')
+        return pd.DataFrame(tweets)
+
+
+    # searches a list of queries, concatenates results and filters dups out
+    def search_list(self, b: list, sentiments: bool=False, max_pgs: int=50, save: bool=True):
+        tweets_df = []
+        for q in b:
+            print(f'searching for: {q}\n')
+            tweets = self.search(q=q, sentiments=sentiments, max_pgs=max_pgs)
+            tweets_df.append(tweets)
+
+        tweets_df = pd.concat(tweets_df, axis=0, ignore_index=True).astype(str).fillna('-').drop_duplicates(subset=['username', 'tweet_text'])
+        if save: 
+            savep = datetime.today().strftime(f'%y%m%d_{b[0][1:-1]}_{len(tweets_df)}.csv')
+            tweets_df.to_csv(savep, index=False)
+
+        return tweets_df
+
+    
     @staticmethod
     def form_query(q: str, endpoint: str='https://nitter.net/search', since: str='', until: str='', near: str=''):
         f = 'tweets'
@@ -116,12 +190,22 @@ class nitter_scraper:
         text = text.strip(string.punctuation + string.whitespace)
         return text
 
-
+    # utility function to read query file into word lists
+    @staticmethod
+    def read_queries(query_file: str='./twitter_queries.csv'):
+        # reading the twitter queries for all banks
+        # quoting = 1 is the same as csv.QUOTE_ALL so no need to import csv library
+        queries = pd.read_csv(query_file, dtype=str)
+        queries = queries.applymap(lambda txt : f'"{txt}"' if pd.notnull(txt) else np.nan)
+        return [list(queries[col].dropna()) for col in queries.columns]
 
 if __name__ == '__main__':
-    nitter = nitter_scraper()
-    tweets = nitter.search(q='scotiabank')
+    # nitter = nitter_scraper()
+    # banks = nitter_scraper.read_queries()
 
-    tweets.to_csv('./scotiabank_stuff.csv')
-    # text = 'hello there whats up today'
-    # print(detect(text))
+    # for b in banks:
+    #     nitter.search_list(b=b, sentiments=True, max_pgs=50)
+
+    nitter = nitter_scraper()
+    bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
+    nitter.search_list(b=td, sentiments=True, max_pgs=50)

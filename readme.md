@@ -1,4 +1,4 @@
-# scraper for [nitter *twitter mirror*] (https://nitter.net/search)
+# scraper for [nitter] (https://nitter.net/search) *twitter mirror
 
 ## usage
 this scraper is designed to work in debain/ubuntu/wsl2 
@@ -22,5 +22,12 @@ python3
 # edit banks being search 
 # first run may be slow bc bertweet stuff needs to download
 python3 -m nitter_scraper
+```  
 
-```
+### notes
+1. OSError: Could not find a suitable TLS CA certificate bundle, invalid path: /etc/ssl/certs/ca-certificates.crt
+   1. sudo ln /etc/ssl/certs/<any .pem cert> /etc/ssl/certs/ca-certificats.crt
+   2. sudo update-ca-certificates
+   
+2. issues with emoji package
+   1. downgrade to emoji==1.7.0 i.e pip uninstall emoji pip install emoji==1.7.0

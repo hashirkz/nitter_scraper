@@ -13,7 +13,6 @@ import string
 from datetime import datetime
 
 from sentiment_stuff import measure_afinn, measure_bertweet, measure_bing, measure_sid
-# from functools import map
 
 # SETTINGS AND GLOBAL STUFF
 

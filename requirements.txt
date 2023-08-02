@@ -9,4 +9,5 @@ text2emotion==0.0.5
 nltk==3.8.1
 transformers==4.30.2
 xformers==0.0.20
+torch==2.0.1
 pip-system-certs==4.0

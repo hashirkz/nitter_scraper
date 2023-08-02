@@ -208,4 +208,4 @@ if __name__ == '__main__':
 
     nitter = nitter_scraper()
     bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
-    nitter.search_list(b=td, sentiments=True, max_pgs=50)
+    nitter.search_list(b=scotiabank, sentiments=True, max_pgs=50)

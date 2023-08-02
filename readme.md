@@ -1,4 +1,4 @@
-# scraper for [nitter] (https://nitter.net/search) *twitter mirror
+# scraper for [nitter](https://nitter.net/search) *twitter mirror
 
 ## usage
 this scraper is designed to work in debain/ubuntu/wsl2 

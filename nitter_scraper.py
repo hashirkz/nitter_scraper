@@ -69,6 +69,7 @@ class nitter_scraper:
         show_rt: bool=False,
         sentiments: bool=False,
         add_q_col: bool=False,
+        save: bool=False,
         tweet_css='tweet-content', 
         showmore_css='show-more', 
         username_css='username', 
@@ -153,7 +154,11 @@ class nitter_scraper:
         if add_q_col: tweets['q'] = q
         tweets = pd.DataFrame(tweets).drop_duplicates(subset=['username', 'tweet_text'])
         print(f'results: {len(tweets)}\n')
-        return pd.DataFrame(tweets)
+        if save: 
+            savep = datetime.today().strftime(f'%y%m%d_{nitter_scraper.reformat_text(q)}_{len(tweets)}.csv')
+            tweets.to_csv(savep, index=False)
+
+        return tweets
 
 
     # searches a list of queries, concatenates results and filters dups out
@@ -208,3 +213,6 @@ if __name__ == '__main__':
     nitter = nitter_scraper()
     bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
     nitter.search_list(b=scotiabank, sentiments=True, max_pgs=50)
+
+    # nitter = nitter_scraper()
+    # nitter.search(q='"league of legends" OR "lol" OR "@riot"', max_pgs=100, sentiments=True, save=True)

@@ -3,8 +3,9 @@
 ## usage
 this scraper is designed to work in debain/ubuntu/wsl2 
 ```bash
-# clone the nitter_stuff repository
+# clone and cd to the nitter_stuff repository
 git clone 'https://github.com/hashirkz/nitter_scraper'
+cd nitter_scraper
 
 # create venv and install dependencies
 python3 -m venv .venv

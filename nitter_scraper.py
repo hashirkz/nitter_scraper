@@ -14,24 +14,22 @@ from datetime import datetime
 
 from sentiment_stuff import measure_afinn, measure_bertweet, measure_bing, measure_sid
 
-# SETTINGS AND GLOBAL STUFF
-
-HEADERS = {
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Sec-Ch-Ua": '"Not/A)Brand";v="99", "Google Chrome";v="115", "Chromium";v="115"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none",
-        "Sec-Fetch-User": "?1",
-        "Upgrade-Insecure-Requests": "1",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-    }
-
 class nitter_scraper:
+    # SETTINGS AND GLOBAL STUFF
+    HEADERS = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Sec-Ch-Ua": '"Not/A)Brand";v="99", "Google Chrome";v="115", "Chromium";v="115"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": '"Windows"',
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+        }
     
     def __init__(self, headers=HEADERS, domain='https://nitter.net/search'):
         self._headers = headers
@@ -203,6 +201,7 @@ class nitter_scraper:
         queries = queries.applymap(lambda txt : f'"{txt}"' if pd.notnull(txt) else np.nan)
         return [list(queries[col].dropna()) for col in queries.columns]
 
+
 if __name__ == '__main__':
     # nitter = nitter_scraper()
     # banks = nitter_scraper.read_queries()
@@ -213,6 +212,7 @@ if __name__ == '__main__':
     nitter = nitter_scraper()
     bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
     nitter.search_list(b=scotiabank, sentiments=True, max_pgs=50)
+
 
     # nitter = nitter_scraper()
     # nitter.search(q='"league of legends" OR "lol" OR "@riot"', max_pgs=100, sentiments=True, save=True)

@@ -14,6 +14,9 @@ from datetime import datetime
 
 from sentiment_stuff import measure_afinn, measure_bertweet, measure_bing, measure_sid
 
+# disabiling ssl verification warning
+requests.packages.urllib3.disable_warnings()
+
 class nitter_scraper:
     # SETTINGS AND GLOBAL STUFF
     HEADERS = {

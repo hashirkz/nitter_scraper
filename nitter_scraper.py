@@ -77,7 +77,7 @@ class nitter_scraper:
 
         tweets = []
         for pg in range(max_pgs):
-            resp = requests.get(url, headers=self._headers)
+            resp = requests.get(url, headers=self._headers, verify=False)
             soup = BeautifulSoup(resp.text, 'html.parser')
 
             print(f'pgs {pg+1}/{max_pgs}')

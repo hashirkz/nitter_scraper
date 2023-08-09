@@ -33,10 +33,10 @@ class nitter_scraper:
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
         }
-    
-    def __init__(self, headers=HEADERS, domain='https://nitter.net/search'):
+    _endpoint = r'https://nitter.net/search'
+
+    def __init__(self, headers=HEADERS):
         self._headers = headers
-        self._domain = domain
 
     '''
         generates formatted query to search nitter.net
@@ -93,6 +93,7 @@ class nitter_scraper:
             if zipped: 
                 for user, tweet, date in zipped:
                     # clean tweet
+                    tweet_raw = nitter_scraper.soft_clean(tweet.text)
                     tweet = nitter_scraper.reformat_text(tweet.text) if clean else tweet.text
                     user = user.text[1:]
                     date = nitter_scraper.reformat_text(date.findChild('a')['title'])
@@ -120,6 +121,7 @@ class nitter_scraper:
                         tweets.append({
                             'username': user,
                             'tweet_text': tweet,
+                            'tweet_raw': tweet_raw,
                             'date': date,
                             'happy': happy,
                             'angry': angry,
@@ -137,6 +139,7 @@ class nitter_scraper:
                         tweets.append({
                             'username': user,
                             'tweet_text': tweet,
+                            'tweet_raw': tweet_raw,
                             'date': date,
                         })
 
@@ -150,7 +153,7 @@ class nitter_scraper:
                 break
 
             url = show_more.findChild('a')['href']
-            url = f'{self._domain}/{url}'
+            url = f'{self._endpoint}/{url}'
 
         if add_q_col: tweets['q'] = q
         tweets = pd.DataFrame(tweets).drop_duplicates(subset=['username', 'tweet_text'])
@@ -179,9 +182,9 @@ class nitter_scraper:
 
     
     @staticmethod
-    def form_query(q: str, endpoint: str='https://nitter.net/search', since: str='', until: str='', near: str=''):
+    def form_query(q: str, since: str='', until: str='', near: str=''):
         f = 'tweets'
-        url = f'{endpoint}?f={f}&q={q}&since={since}&until={until}&near={near}'
+        url = f'{nitter_scraper._endpoint}?f={f}&q={q}&since={since}&until={until}&near={near}'
         return url
     
     # formats text by all alphanumeric lowercase no trailing punctuation + ' ' \n no special characters
@@ -193,6 +196,12 @@ class nitter_scraper:
         text = text.replace('\n', ' ')
         text = re.sub(r'http.*', '', text)
         text = text.strip(string.punctuation + string.whitespace)
+        return text
+
+    @staticmethod
+    def soft_clean(text: str) -> str:
+        text = re.sub(r"[\n'\",]", '', text)
+        text = text.strip(string.whitespace)
         return text
 
     # utility function to read query file into word lists
@@ -214,7 +223,7 @@ if __name__ == '__main__':
 
     nitter = nitter_scraper()
     bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
-    nitter.search_list(b=scotiabank, sentiments=True, max_pgs=50)
+    nitter.search_list(b=td, sentiments=True, max_pgs=100)
 
 
     # nitter = nitter_scraper()

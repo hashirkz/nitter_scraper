@@ -224,8 +224,8 @@ if __name__ == '__main__':
 
     nitter = nitter_scraper()
     bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
-    nitter.search_list(b=td, sentiments=True, max_pgs=100)
+    nitter.search_list(b=td, sentiments=True, max_pgs=50)
 
 
     # nitter = nitter_scraper()
-    # nitter.search(q='"league of legends" OR "lol" OR "@riot"', max_pgs=100, sentiments=True, save=True)
+    # nitter.search(q='uhhh', max_pgs=100, sentiments=True, save=True)

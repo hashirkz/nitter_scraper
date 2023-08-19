@@ -33,8 +33,8 @@ class nitter_scraper:
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
         }
-    # _endpoint = r'https://nitter.net/search'
-    _endpoint = r'https://tweet.whateveritworks.org/search'
+    _endpoint = r'https://nitter.net/search'
+    # _endpoint = r'https://tweet.whateveritworks.org/search'
 
     def __init__(self, headers=HEADERS):
         self._headers = headers
@@ -222,10 +222,10 @@ if __name__ == '__main__':
     # for b in banks:
     #     nitter.search_list(b=b, sentiments=True, max_pgs=50)
 
-    nitter = nitter_scraper()
-    bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
-    nitter.search_list(b=td, sentiments=True, max_pgs=50)
-
-
     # nitter = nitter_scraper()
-    # nitter.search(q='uhhh', max_pgs=100, sentiments=True, save=True)
+    # bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
+    # nitter.search_list(b=td, sentiments=True, max_pgs=50)
+
+
+    nitter = nitter_scraper()
+    nitter.search(q='"splatoon" or "splatoon 3" or "splatoon 2"', max_pgs=50, sentiments=True, save=True)

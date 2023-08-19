@@ -9,6 +9,7 @@ import text2emotion as te           # 0.0.5 please downgrade following library e
 
 import os
 import re
+import time
 import string
 from datetime import datetime
 
@@ -33,8 +34,8 @@ class nitter_scraper:
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
         }
-    _endpoint = r'https://nitter.net/search'
-    # _endpoint = r'https://tweet.whateveritworks.org/search'
+    # _endpoint = r'https://nitter.net/search'
+    _endpoint = r'https://tweet.whateveritworks.org/search'
 
     def __init__(self, headers=HEADERS):
         self._headers = headers
@@ -66,22 +67,31 @@ class nitter_scraper:
         q: str='', 
         max_pgs: int=50, 
         clean: bool=True, 
-        lang='en', 
+        lang: str='en', 
         filter_lang: bool=True, 
         show_rt: bool=False,
         sentiments: bool=False,
         add_q_col: bool=False,
         save: bool=False,
-        tweet_css='tweet-content', 
-        showmore_css='show-more', 
-        username_css='username', 
-        date_css='tweet-date'):
+        wait_mins_rlim: int=10,
+        tweet_css: str='tweet-content', 
+        showmore_css: str='show-more', 
+        username_css: str='username', 
+        date_css: str='tweet-date'):
 
         url = nitter_scraper.form_query(q)
 
         tweets = []
         for pg in range(max_pgs):
             resp = requests.get(url, headers=self._headers, verify=False)
+
+            # loop to wait for rate limit * keeps track of how long rate limit waits
+            waited = time.time()
+            while resp.status_code == 429:
+                print(f'rate limited waited for {(time.time() - waited) / 60}m')
+                time.sleep(wait_mins_rlim * 60)
+                resp = requests.get(url, headers=self._headers, verify=False)
+                
             soup = BeautifulSoup(resp.text, 'html.parser')
 
             print(f'pgs {pg+1}/{max_pgs}')
@@ -228,4 +238,4 @@ if __name__ == '__main__':
 
 
     # nitter = nitter_scraper()
-    # nitter.search(q='"splatoon" or "splatoon 3" or "splatoon 2"', max_pgs=50, sentiments=True, save=True)
+    # nitter.search(q='"nasa" or "space"', max_pgs=100, sentiments=True, save=True)

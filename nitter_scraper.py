@@ -34,8 +34,8 @@ class nitter_scraper:
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
         }
-    # _endpoint = r'https://nitter.net/search'
-    _endpoint = r'https://tweet.whateveritworks.org/search'
+    _endpoint = r'https://nitter.net/search'
+    # _endpoint = r'https://tweet.whateveritworks.org/search'
 
     def __init__(self, headers=HEADERS):
         self._headers = headers
@@ -238,4 +238,4 @@ if __name__ == '__main__':
 
 
     # nitter = nitter_scraper()
-    # nitter.search(q='"nasa" or "space"', max_pgs=100, sentiments=True, save=True)
+    # nitter.search(q='"nasa" or "space"', max_pgs=50, sentiments=True, save=True)

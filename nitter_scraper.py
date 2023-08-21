@@ -232,10 +232,10 @@ if __name__ == '__main__':
     # for b in banks:
     #     nitter.search_list(b=b, sentiments=True, max_pgs=50)
 
-    # nitter = nitter_scraper()
-    # bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
-    # nitter.search_list(b=td, sentiments=True, max_pgs=50)
-
-
     nitter = nitter_scraper()
-    nitter.search(q='"nasa" or "space"', max_pgs=50, sentiments=True, save=True)
+    bmo,cibc,rbc,scotiabank,td = nitter_scraper.read_queries()
+    nitter.search_list(b=td, sentiments=True, max_pgs=50)
+
+
+    # nitter = nitter_scraper()
+    # nitter.search(q='"nasa" or "space"', max_pgs=50, sentiments=True, save=True)

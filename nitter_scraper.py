@@ -34,7 +34,10 @@ class nitter_scraper:
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
         }
+    
+    # list of different mirrors
     _endpoint = r'https://nitter.net/search'
+    # _endpoint = r'https://nitter.nicfab.eu/search'
     # _endpoint = r'https://tweet.whateveritworks.org/search'
 
     def __init__(self, headers=HEADERS):
@@ -73,7 +76,8 @@ class nitter_scraper:
         sentiments: bool=False,
         add_q_col: bool=False,
         save: bool=False,
-        wait_mins_rlim: int=10,
+        wait_mins_rlim: int=4,
+        short_date_format: bool=True,
         tweet_css: str='tweet-content', 
         showmore_css: str='show-more', 
         username_css: str='username', 
@@ -120,6 +124,11 @@ class nitter_scraper:
 
                     # skip if not showing retweets
                     if not show_rt and tweet.lower().startswith('rt'): continue
+                    
+                    # truncate date if short_date_format flag is on
+                    if short_date_format: 
+                        _ = datetime.strptime(date.split('  ')[0], "%b %d %Y")
+                        date = _.strftime("%m/%d/%Y")
 
                     # finds all the sentiments
                     if sentiments:
@@ -238,4 +247,4 @@ if __name__ == '__main__':
 
 
     # nitter = nitter_scraper()
-    # nitter.search(q='"nasa" or "space"', max_pgs=50, sentiments=True, save=True)
+    # nitter.search(q='"nasa" OR "spacex"', max_pgs=50, sentiments=True, save=True)

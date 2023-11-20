@@ -7,22 +7,16 @@ this scraper is designed to work in debain/ubuntu/wsl2
 git clone 'https://github.com/hashirkz/nitter_scraper'
 cd nitter_scraper
 
-# create venv and install dependencies
-python3 -m venv .venv
-. ./.venv/bin/activate
+# AUTOMATED SETUP
+./setup.sh
+. ./nitter_stuff/bin/activate
 
-# this may take a while ~1hr
-python3 -m pip install -r 'requirements.txt'
-python3
->> import nltk
->> nltk.download('all')
-...
->> quit()
 
-# in if __name__ == '__main__' for ./nitter_scraper.py
-# edit banks being search 
-# first run may be slow bc bertweet stuff needs to download
+# bank tweets searcher already setup not dynamic
 python3 -m nitter_scraper
+
+# cli utility see cli usage below
+python3 -m nitter
 ```  
 ### maintaining
 1. `./twitter_queries.csv`
@@ -83,14 +77,6 @@ python3 -m nitter_scraper
    1. downgrade to emoji==1.7.0 i.e pip uninstall emoji pip install emoji==1.7.0
    2. 
 ##### cli usage
-```bash
-git clone "https://github.com/hashirkz/nitter_scraper"
-cd nitter_scraper
-./setup.sh
-. ./nitter_stuff/bin/activate
-```
-
-```
 python3 -m nitter <query: str> xor <query_file: str> OPTIONS
 
 *xor meaning only 1 of these can be used at a time dont mix together lol
@@ -108,8 +94,10 @@ OPTIONS ? DEFAULT:
    --no-sentiments: flag -> if present wont append sentiments     ? false
    --no-save: flag -> if present wont save to a file              ? false
 
-example usage *see "./231120_mcgill or mcgill university_262.csv":
-(nitter_stuff) sleepyzzz:/mnt/c/users/hashi/documents/nitter_stuff$ python3 -m nitter -q '"mcgill" OR "mcgill university"' -p 50
+
+example usage *see "./231120_mcgill or mcgill university_262.csv":  
+```
+>> python3 -m nitter -q '"mcgill" OR "mcgill university"' -p 50
 [nltk_data] Downloading package stopwords to
 [nltk_data]     /home/sleepyzzz/nltk_data...
 [nltk_data]   Package stopwords is already up-to-date!

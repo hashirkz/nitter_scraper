@@ -229,6 +229,10 @@ class nitter_scraper:
     def read_queries(query_file: str='./twitter_queries.csv'):
         # reading the twitter queries for all banks
         # quoting = 1 is the same as csv.QUOTE_ALL so no need to import csv library
+        if not os.path.exists(query_file):
+            print(f'unable to read {query_file}\n')
+            return 0
+            
         queries = pd.read_csv(query_file, dtype=str)
         queries = queries.applymap(lambda txt : f'"{txt}"' if pd.notnull(txt) else np.nan)
         return [list(queries[col].dropna()) for col in queries.columns]

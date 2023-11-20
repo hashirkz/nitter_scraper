@@ -75,7 +75,8 @@ python3 -m nitter
 2. issues with emoji package
    1. downgrade to emoji==1.7.0 i.e pip uninstall emoji pip install emoji==1.7.0
    2. 
-##### cli usage
+#### cli usage  
+```
 python3 -m nitter <query: str> xor <query_file: str> OPTIONS
 
 *xor meaning only 1 of these can be used at a time dont mix together lol
@@ -92,7 +93,7 @@ OPTIONS ? DEFAULT:
    --retweets: flag -> if present wont filter out retweets        ? false
    --no-sentiments: flag -> if present wont append sentiments     ? false
    --no-save: flag -> if present wont save to a file              ? false
-
+```
 
 example usage *see "./231120_mcgill or mcgill university_262.csv":  
 ```

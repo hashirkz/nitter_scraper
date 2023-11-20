@@ -11,7 +11,6 @@ cd nitter_scraper
 ./setup.sh
 . ./nitter_stuff/bin/activate
 
-
 # bank tweets searcher already setup not dynamic
 python3 -m nitter_scraper
 

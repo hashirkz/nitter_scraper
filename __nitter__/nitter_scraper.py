@@ -13,7 +13,7 @@ import time
 import string
 from datetime import datetime
 
-from sentiment_stuff import measure_afinn, measure_bertweet, measure_bing, measure_sid
+from .sentiment_stuff import measure_afinn, measure_bertweet, measure_bing, measure_sid
 
 # disabiling ssl verification 
 requests.packages.urllib3.disable_warnings()
@@ -39,7 +39,8 @@ class nitter_scraper:
     _endpoint = r'https://nitter.net/search'
     # _endpoint = r'https://nitter.nicfab.eu/search'
     # _endpoint = r'https://tweet.whateveritworks.org/search'
-
+    
+    wd = os.path.dirname(os.path.abspath(__file__))
     def __init__(self, headers=HEADERS):
         self._headers = headers
 
@@ -226,7 +227,12 @@ class nitter_scraper:
 
     # utility function to read query file into word lists
     @staticmethod
-    def read_queries(query_file: str='./twitter_queries.csv'):
+    def read_queries(query_file: str=None):
+
+        # default query file is bank_queries.csv for td stuff
+        if not query_file:
+            query_file = os.path.join(nitter_scraper.wd, 'query', 'bank_queries.csv')
+        
         # reading the twitter queries for all banks
         # quoting = 1 is the same as csv.QUOTE_ALL so no need to import csv library
         if not os.path.exists(query_file):

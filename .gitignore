@@ -3,5 +3,9 @@ csvs
 config_stuff
 old_stuff
 nitter_stuff
+.env
 scotiabank_tweets
 td_tweets
+build
+dist
+nitter_miner.egg-info

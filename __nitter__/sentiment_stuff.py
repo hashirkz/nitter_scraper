@@ -7,6 +7,9 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 # from profanity_check import predict_prob as measure_swear
 
 import os
+
+wd = os.path.dirname(os.path.abspath(__file__))
+
 bertweet = pipeline('sentiment-analysis', model='finiteautomata/bertweet-base-sentiment-analysis')
 _sid = SentimentIntensityAnalyzer()
 
@@ -15,7 +18,8 @@ _sid = SentimentIntensityAnalyzer()
 os.environ["REQUESTS_CA_BUNDLE"] = r'/etc/ssl/certs/ca-bundle.crt'
 
 # private afinn bing numpy lookup tables
-_AFINN, _BING = pd.read_csv('./sentiment_dictionaries/afinn.csv').to_numpy(), pd.read_csv('./sentiment_dictionaries/bing.csv').to_numpy()
+_AFINN_PATH, _BING_PATH = os.path.join(wd, "sentiment_dictionaries/afinn.csv"), os.path.join(wd, "sentiment_dictionaries/bing.csv")
+_AFINN, _BING = pd.read_csv(_AFINN_PATH).to_numpy(), pd.read_csv(_BING_PATH).to_numpy()
 
 # measure sentiment by the passed in sentiment dictionary
 def measure(txt: str, sentiment_df: np.ndarray):

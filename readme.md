@@ -4,7 +4,11 @@
 
 ## recommended installation
 ```bash
+# install nitter cli application
 pip install nitter-miner
+
+# if youve never used nltk you have to do this its silly but yea
+python3 -c "import nltk; nltk.download('all')"
 
 # now you can use the nitter cli app 
 # default installed to ~/.local/bin/nitter
@@ -26,6 +30,7 @@ python3 -m __nitter__.nitter_scraper
 # for cli application
 python3 -m __nitter__.nitter
 ```  
+
 ### cli usage  
 ```
 #nitter-miner: 0.0.6
@@ -149,3 +154,5 @@ results: 262
 2. issues with emoji package
    1. downgrade to emoji==1.7.0 i.e pip uninstall emoji pip install emoji==1.7.0
    2. uninstall numpy and install numpy == 1.23.0
+
+3. does not work with python >3.10 because of numpy 1.23.0 version issues

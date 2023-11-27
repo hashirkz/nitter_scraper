@@ -5,5 +5,6 @@ WORKDIR /app
 COPY . /app/
 
 RUN pip install --no-cache-dir nitter-miner
+RUN python -c "import nltk; nltk.download('all')"
 
-CMD ["nitter", "-q", "'leagueoflegends OR lol'", '-p', '10']
+# CMD ["~/.local/bin/nitter", "-q", "'leagueoflegends OR lol'", '-p', '10']

@@ -5,7 +5,7 @@ with open("long_desc.md", "r") as fh:
 
 setup(
     name="nitter-miner",
-    version="0.0.5",
+    version="0.0.6",
     author="hashirkz",
     author_email="hashir.khan@mail.mcgill.ca",
     description="cli utility for data mining https://nitter.net/serach",
@@ -20,7 +20,7 @@ setup(
         ],
     },
     install_requires=[
-        'numpy==1.24.3',
+        'numpy==1.23.0',
         'pandas==2.0.2',
         'bs4==0.0.1',
         'requests==2.28.1',

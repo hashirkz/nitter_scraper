@@ -28,6 +28,7 @@ python3 -m __nitter__.nitter
 ```  
 ### cli usage  
 ```
+#nitter-miner: 0.0.6
 nitter -q <query: str> xor -qf <query_file: str> OPTIONS
 
 -q:   string query to search nitter for *for query formats see /query_info.txt

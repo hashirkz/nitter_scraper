@@ -5,7 +5,7 @@ with open("long_desc.md", "r") as fh:
 
 setup(
     name="nitter-miner",
-    version="0.0.4",
+    version="0.0.5",
     author="hashirkz",
     author_email="hashir.khan@mail.mcgill.ca",
     description="cli utility for data mining https://nitter.net/serach",

@@ -1,6 +1,6 @@
 # about
-cli scraping application for [nitter](https://nitter.net/search) a popular *twitter mirror
-designed for debain/ubuntu/wsl2 and python3
+- cli scraping application for [nitter](https://nitter.net/search) a popular *twitter mirror    
+- works for debain/ubuntu/wsl2 and python3    
 
 ## recommended installation
 ```bash

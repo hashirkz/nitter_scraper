@@ -1,0 +1,7 @@
+__pycache__
+build
+dist
+*.egg-info
+nitter_stuff
+old_stuff
+tweets

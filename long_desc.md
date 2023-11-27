@@ -1,6 +1,6 @@
 # about
 - cli scraping application for [nitter](https://nitter.net/search) a popular *twitter mirror    
-- works for debain/ubuntu/wsl2 and python3    
+- works for debain/ubuntu/wsl2 and python3 
 
 ## recommended installation
 ```bash
@@ -26,31 +26,31 @@ python3 -m __nitter__.nitter_scraper
 # for cli application
 python3 -m __nitter__.nitter
 ```  
-
-#### cli usage  
+### cli usage  
 ```
 nitter -q <query: str> xor -qf <query_file: str> OPTIONS
 
-   -q:   string query to search nitter for *for query formats see /query_info.txt
-   
-   -qf: 
-         if ur constantly searching the same set of queries make a queryfile.csv
-         *note the header/first line is ignored.
-         ex format of queryfile:
-         nasa,spacex,...
-         nasa,spacex,...
-         @NASA,@SpaceX,
+-q:   string query to search nitter for *for query formats see /query_info.txt
 
-         the actual query which will be searched is 'nasa OR spacex OR @NASA OR @SpaceX'
+-qf: 
+      if ur constantly searching the same set of queries make a queryfile.csv
+      *note the header/first line is ignored.
+      ex format of queryfile:
+      nasa,spacex,...
+      nasa,spacex,...
+      @NASA,@SpaceX,
 
-   *note do not use -q and -qf flags together it will not work also theres no reason to do this
+      the actual query which will be searched is 'nasa OR spacex OR @NASA OR @SpaceX'
 
-OPTIONS ? DEFAULT:
-   -p / --pgs: int, max number of pgs to search for query         ? 50
-   -m / --mirror: str -> which mirror to search                   ? https://nitter.net/search
-   --retweets: flag -> if present wont filter out retweets        ? false
-   --no-sentiments: flag -> if present wont append sentiments     ? false
-   --no-save: flag -> if present wont save to a file              ? false
+*note do not use -q and -qf flags together it will not work also theres no reason to do this
+
+OPTIONS                                                        ? DEFAULT
+------------------------------------------------------------------------
+-p / --pgs: int, max number of pgs to search for query         ? 50
+-m / --mirror: str -> which mirror to search                   ? https://nitter.net/search
+--retweets: flag -> if present wont filter out retweets        ? false
+--no-sentiments: flag -> if present wont append sentiments     ? false
+--no-save: flag -> if present wont save to a file              ? false
 ```
 
 #### example usage *see "/tweets/231120_mcgill or mcgill university_262.csv":  
@@ -89,12 +89,3 @@ searching https://nitter.net/search/?f=tweets&q=%22mcgill%22+OR+%22mcgill+univer
 
 results: 262
 ```
-
-##### notes
-1. OSError: Could not find a suitable TLS CA certificate bundle, invalid path: /etc/ssl/certs/ca-certificates.crt
-   1. sudo ln /etc/ssl/certs/<any .pem cert> /etc/ssl/certs/ca-certificates.crt
-   2. sudo update-ca-certificates
-   
-2. issues with emoji package
-   1. downgrade to emoji==1.7.0 i.e pip uninstall emoji pip install emoji==1.7.0
-   2. uninstall numpy and install numpy == 1.23.0

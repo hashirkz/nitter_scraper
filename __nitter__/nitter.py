@@ -3,18 +3,16 @@ from .nitter_scraper import nitter_scraper
 import argparse
 import os
 
-msg = '''
-help/documentation:
-    https://github.com/hashirkz/nitter_scraper
-    ver 0.1.1
+msg = 'help/documentation:\n\thttps://github.com/hashirkz/twitter_scraper\n\tver 0.1.1\n\ndescription:\n\twebscraper for pulling tweets from...\n\t'
+mirrors = [
+    'https://nitter.net/search',
+    'https://nitter.nicfab.eu/search',
+    'https://nitter.privacydev.net/search',
+    'https://tweet.whateveritworks.org/search'
+]
 
-description:
-    webscraper for pulling tweets from...
-    https://nitter.net/search
-    https://nitter.nicfab.eu/search
-    https://nitter.privacydev.net/search
-    https://tweet.whateveritworks.org/search
-'''
+msg += '\n\t'.join(mirrors) + '\n'
+
 def app():
     parser = argparse.ArgumentParser(
         prog="nitter",
@@ -34,14 +32,13 @@ def app():
     # defaults to true now
     params.senti, params.save = not params.senti, not params.save
     
-    # if we want to dynamically search some different mirror
-    nitter = nitter_scraper()
-    nitter._endpoint=params.mirror
     if not params.query and not params.query_file:
         print('ERROR: no supplied query or queryfile')
-
-
-    elif params.query:
+        return
+    
+    # if we want to dynamically search some different mirror
+    nitter = nitter_scraper(_endpoint=params.mirror)
+    if params.query:
         nitter.search(
             q=params.query, max_pgs=params.pgs, show_rt=params.retweets, 
             sentiments=params.senti, save=params.save)    

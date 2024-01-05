@@ -2,7 +2,7 @@
 - cli scraping application for [nitter](https://nitter.net/search) a popular *twitter mirror    
 - works for debain/ubuntu/wsl2 and python3 
 
-## recommended installation
+## installation
 ```bash
 # install nitter cli application
 pip install nitter-miner
@@ -14,41 +14,24 @@ python3 -c "import nltk; nltk.download('all')"
 # default installed to ~/.local/bin/nitter
 nitter -q <query> or <query_file> 
 ```
-## manual installation
-```bash
-# clone and cd to the nitter_stuff repository
-git clone 'https://github.com/hashirkz/twitter_scraper'
-cd twitter_scraper
-
-python3 -m venv .venv
-. ./.venv/bin/activate
-python3 -m pip install -r 'requirements.txt'
-
-# for td bank tweets queries defaults to 50pgs
-python3 -m __nitter__.nitter_scraper
-
-# for cli application
-python3 -m __nitter__.nitter
-```  
 
 ### cli usage  
-```
-#nitter-miner: 0.0.7
-nitter -q <query: str> xor -qf <query_file: str> OPTIONS
+#nitter-miner: 0.0.8  
+nitter -q <query: str> xor -qf <query_file: str> OPTIONS  
 
--q:   string query to search nitter for *for query formats see /query_info.txt
+-q:   string query to search nitter for *for query formats see /query_info.txt  
 
--qf: 
-      if ur constantly searching the same set of queries make a queryfile.csv
-      *note the header/first line is ignored.
-      ex format of queryfile:
-      nasa,spacex,...
-      nasa,spacex,...
-      @NASA,@SpaceX,
+-qf:  
+      if ur constantly searching the same set of queries make a queryfile.csv  
+      *note the header/first line is ignored.  
+      ex format of queryfile:  
+      nasa,spacex,...  
+      nasa,spacex,...  
+      @NASA,@SpaceX,  
 
-      the actual query which will be searched is 'nasa OR spacex OR @NASA OR @SpaceX'
+      the actual query which will be searched is 'nasa OR spacex OR @NASA OR @SpaceX'  
 
-*note do not use -q and -qf flags together it will not work also theres no reason to do this
+*note do not use -q and -qf flags together it will not work also theres no reason to do this  
 
 OPTIONS                                                        ? DEFAULT
 ------------------------------------------------------------------------
@@ -156,3 +139,20 @@ results: 262
    2. uninstall numpy and install numpy == 1.23.0
 
 3. does not work with python >3.10 because of numpy 1.23.0 version issues
+
+##### manual installation **NOT RECOMMENDED**
+```bash
+# clone and cd to the nitter_stuff repository
+git clone 'https://github.com/hashirkz/twitter_scraper'
+cd twitter_scraper
+
+python3 -m venv .venv
+. ./.venv/bin/activate
+python3 -m pip install -r 'requirements.txt'
+
+# for td bank tweets queries defaults to 50pgs
+python3 -m __nitter__.nitter_scraper
+
+# for cli application
+python3 -m __nitter__.nitter
+```  

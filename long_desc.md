@@ -1,7 +1,8 @@
 # about
 - cli scraping application for [nitter](https://nitter.net/search) a popular *twitter mirror    
 - works for debain/ubuntu/wsl2 and python3 
-- **01/05/24 - WORKING**
+- **01/05/24 - WORKING**  
+- 
 ## installation
 ```bash
 # install nitter cli application

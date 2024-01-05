@@ -36,14 +36,14 @@ class nitter_scraper:
         }
     
     # list of different mirrors
-    _endpoint = r'https://nitter.net/search'
+    # _endpoint = r'https://nitter.net/search'
     # _endpoint = r'https://nitter.nicfab.eu/search'
     # _endpoint = r'https://tweet.whateveritworks.org/search'
     
     wd = os.path.dirname(os.path.abspath(__file__))
-    def __init__(self, headers=HEADERS):
+    def __init__(self, headers=HEADERS, _endpoint: str=r'https://nitter.net/search'):
         self._headers = headers
-
+        self._endpoint = _endpoint
     '''
         generates formatted query to search nitter.net
         how to format search queries *q:
@@ -84,7 +84,7 @@ class nitter_scraper:
         username_css: str='username', 
         date_css: str='tweet-date'):
 
-        url = nitter_scraper.form_query(q)
+        url = self.form_query(q)
 
         tweets = []
         for pg in range(max_pgs):
@@ -202,10 +202,9 @@ class nitter_scraper:
         return tweets_df
 
     
-    @staticmethod
-    def form_query(q: str, since: str='', until: str='', near: str=''):
+    def form_query(self, q: str, since: str='', until: str='', near: str=''):
         f = 'tweets'
-        url = f'{nitter_scraper._endpoint}?f={f}&q={q}&since={since}&until={until}&near={near}'
+        url = f'{self._endpoint}?f={f}&q={q}&since={since}&until={until}&near={near}'
         return url
     
     # formats text by all alphanumeric lowercase no trailing punctuation + ' ' \n no special characters

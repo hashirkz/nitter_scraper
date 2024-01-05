@@ -17,8 +17,8 @@ nitter -q <query> or <query_file>
 ## manual installation
 ```bash
 # clone and cd to the nitter_stuff repository
-git clone 'https://github.com/hashirkz/nitter_scraper'
-cd nitter_scraper
+git clone 'https://github.com/hashirkz/twitter_scraper'
+cd twitter_scraper
 
 python3 -m venv .venv
 . ./.venv/bin/activate
@@ -33,7 +33,7 @@ python3 -m __nitter__.nitter
 
 ### cli usage  
 ```
-#nitter-miner: 0.0.6
+#nitter-miner: 0.0.7
 nitter -q <query: str> xor -qf <query_file: str> OPTIONS
 
 -q:   string query to search nitter for *for query formats see /query_info.txt

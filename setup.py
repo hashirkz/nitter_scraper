@@ -5,13 +5,13 @@ with open("long_desc.md", "r") as fh:
 
 setup(
     name="nitter-miner",
-    version="0.0.6",
+    version="0.0.7",
     author="hashirkz",
-    author_email="hashir.khan@mail.mcgill.ca",
+    author_email="hashirxkhan1@gmail.com",
     description="cli utility for data mining https://nitter.net/serach",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/hashirkz/nitter_scraper",
+    url="https://github.com/hashirkz/twitter_scraper",
     packages=find_packages(),
     include_package_data=True,
     entry_points={

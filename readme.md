@@ -16,33 +16,34 @@ nitter -q <query> or <query_file>
 ```
 
 ### cli usage  
-#nitter-miner: 0.0.8  
-nitter -q <query: str> xor -qf <query_file: str> OPTIONS  
+#nitter-miner: 0.1.0 
+`nitter -q <query: str> xor -qf <query_file: str>`
 
--q:   string query to search nitter for *for query formats see /query_info.txt  
+REQUIRED:    
+- q:   string query to search nitter for \*for query formats see /query_info.txt  
 
--qf:  
+- qf:  
       if ur constantly searching the same set of queries make a queryfile.csv  
       *note the header/first line is ignored.  
       ex format of queryfile:  
       nasa,spacex,...  
       nasa,spacex,...  
-      @NASA,@SpaceX,  
+      @NASA,@SpaceX,...  
+   the actual query which will be searched is `nasa OR spacex OR @NASA OR @SpaceX`  
 
-      the actual query which will be searched is 'nasa OR spacex OR @NASA OR @SpaceX'  
+\*note do not use -q and -qf flags together it will not work also theres no reason to do this  
 
-*note do not use -q and -qf flags together it will not work also theres no reason to do this  
-
-OPTIONS                                                        ? DEFAULT
-------------------------------------------------------------------------
--p / --pgs: int, max number of pgs to search for query         ? 50
--m / --mirror: str -> which mirror to search                   ? https://nitter.net/search
---retweets: flag -> if present wont filter out retweets        ? false
---no-sentiments: flag -> if present wont append sentiments     ? false
---no-save: flag -> if present wont save to a file              ? false
+```
+OPTIONS                                                          ? DEFAULT  
+--------------------------------------------------------------------------------------------    
+- -p / --pgs: int, max number of pgs to search for query         ? 50  
+- -m / --mirror: str -> which mirror to search                   ? https://nitter.net/search  
+- --retweets: flag -> if present wont filter out retweets        ? false   
+- --no-sentiments: flag -> if present wont append sentiments     ? false   
+- --no-save: flag -> if present wont save to a file              ? false   
 ```
 
-#### example usage *see "/tweets/231120_mcgill or mcgill university_262.csv":  
+#### example usage see `/tweets/231120_mcgill or mcgill university_262.csv`: 
 ```
 >> nitter -q '"mcgill" OR "mcgill university"' -p 50
 
